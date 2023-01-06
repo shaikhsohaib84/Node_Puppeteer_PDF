@@ -18,25 +18,30 @@ const compile = async function (templateName, data) {
 app.get('/', (req, res)=>{
     (async function () {
         try {
-            const browser = await puppeteer.launch()
+            const browser = await puppeteer.launch({
+                headless:false,
+                args: ["--no-sandbox"]
+            })
             const page = await browser.newPage()
             const content = await compile('index', data)
             await page.setContent(content)
-            await page.pdf({
+            const pdf = await page.pdf({
                 path: 'output.pdf',
                 format: 'A4',
                 printBackground: true
             })
             await browser.close()
-            process.exit()
+            res.set("Content-Type", "application/pdf");
+            res.send(pdf);
+            // process.exit()
         } catch (e) {
             res.status(500);
             console.log(' ---- ERROR here ------', e)
 	        res.send("Error !");
         }
     })();
-	res.status(200);
-	res.send("PDf generated successfully!");
+	// res.status(200);
+	// res.send("PDf generated successfully!");
 });
 
 app.listen(PORT, (error) =>{
