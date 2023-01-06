@@ -32,7 +32,7 @@ app.get('/', (req, res)=>{
             res.send(pdf);
         } catch (e) {
             res.status(500);
-	        res.send("Error !", e);
+	        res.send({'error': e});
         }
     })();
     
