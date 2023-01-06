@@ -22,22 +22,21 @@ app.get('/', (req, res)=>{
             const page = await browser.newPage()
             const content = await compile('index', data)
             await page.setContent(content)
-            const pdf = await page.pdf({
+            await page.pdf({
+                path: 'output.pdf',
                 format: 'A4',
                 printBackground: true
             })
             await browser.close()
-            res.set("Content-Type", "application/pdf");
-            res.status(200);
-            res.send(pdf);
-        } catch (error) {
+            process.exit()
+        } catch (e) {
             res.status(500);
-            console.log('-------------', error)
-	        res.send({'error': error});
+            console.log(' ---- ERROR here ------', e)
+	        res.send("Error !");
         }
     })();
-    
-	// res.send("PDf generated successfully!");
+	res.status(200);
+	res.send("PDf generated successfully!");
 });
 
 app.listen(PORT, (error) =>{
