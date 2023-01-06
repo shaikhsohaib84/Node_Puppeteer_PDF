@@ -18,22 +18,20 @@ const compile = async function (templateName, data) {
 app.get('/', (req, res)=>{
     (async function () {
         try {
-            const browser = await puppeteer.launch({
-                headless:false,
-                args: ["--no-sandbox"]
-            })
+            const browser = await puppeteer.launch()
             const page = await browser.newPage()
             const content = await compile('index', data)
             await page.setContent(content)
             const pdf = await page.pdf({
-                path: 'output.pdf',
+                // path: 'output.pdf',
                 format: 'A4',
                 printBackground: true
             })
             await browser.close()
+            // process.exit()
+            res.status(200);
             res.set("Content-Type", "application/pdf");
             res.send(pdf);
-            // process.exit()
         } catch (e) {
             res.status(500);
             console.log(' ---- ERROR here ------', e)
@@ -41,6 +39,8 @@ app.get('/', (req, res)=>{
         }
     })();
 	// res.status(200);
+    // res.set("Content-Type", "application/pdf");
+    // res.send(pdf);
 	// res.send("PDf generated successfully!");
 });
 
