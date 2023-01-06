@@ -27,11 +27,11 @@ app.get('/', (req, res)=>{
                 format: 'A4',
                 printBackground: true
             })
-            console.log("done creating pdf")
             await browser.close()
             process.exit()
         } catch (e) {
-            console.log(e)
+            res.status(500);
+	        res.send("Error !", e);
         }
     })();
 	res.status(200);
