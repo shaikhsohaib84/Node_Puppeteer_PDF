@@ -30,9 +30,10 @@ app.get('/', (req, res)=>{
             res.set("Content-Type", "application/pdf");
             res.status(200);
             res.send(pdf);
-        } catch (e) {
+        } catch (error) {
             res.status(500);
-	        res.send({'error': e});
+            console.log('-------------', error)
+	        res.send({'error': error});
         }
     })();
     
